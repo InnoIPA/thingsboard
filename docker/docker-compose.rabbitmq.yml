@@ -1,5 +1,5 @@
 #
-# Copyright © 2016-2021 The Thingsboard Authors
+# Copyright © 2016-2020 The Thingsboard Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,55 +17,77 @@
 version: '2.2'
 
 services:
+  rabbitmq:
+    restart: always
+    container_name: some-rabbit
+    image: rabbitmq:3-management
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 8080:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "icap-rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "icap-rabbitmq"
   tb-js-executor:
     env_file:
       - queue-rabbitmq.env
+    depends_on:
+      - rabbitmq
   tb-core1:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
       - redis
+      - rabbitmq
   tb-core2:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
       - redis
+      - rabbitmq
   tb-rule-engine1:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
       - redis
+      - rabbitmq
   tb-rule-engine2:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
       - redis
+      - rabbitmq
   tb-mqtt-transport1:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
+      - rabbitmq
   tb-mqtt-transport2:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
+      - rabbitmq
   tb-http-transport1:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
+      - rabbitmq
   tb-http-transport2:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
+      - rabbitmq
   tb-coap-transport:
     env_file:
       - queue-rabbitmq.env
     depends_on:
       - zookeeper
+      - rabbitmq
