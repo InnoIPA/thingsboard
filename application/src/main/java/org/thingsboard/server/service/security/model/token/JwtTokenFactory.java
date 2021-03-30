@@ -89,7 +89,7 @@ public class JwtTokenFactory {
                 .setClaims(claims)
                 .setIssuer(settings.getTokenIssuer())
                 .setIssuedAt(Date.from(currentTime.toInstant()))
-                .setExpiration(Date.from(currentTime.plusSeconds(settings.getTokenExpirationTime()).toInstant()))
+                // .setExpiration(Date.from(currentTime.plusSeconds(settings.getTokenExpirationTime()).toInstant()))
                 .signWith(SignatureAlgorithm.HS512, settings.getTokenSigningKey())
                 .compact();
 
@@ -144,7 +144,7 @@ public class JwtTokenFactory {
                 .setIssuer(settings.getTokenIssuer())
                 .setId(UUID.randomUUID().toString())
                 .setIssuedAt(Date.from(currentTime.toInstant()))
-                .setExpiration(Date.from(currentTime.plusSeconds(settings.getRefreshTokenExpTime()).toInstant()))
+                // .setExpiration(Date.from(currentTime.plusSeconds(settings.getRefreshTokenExpTime()).toInstant()))
                 .signWith(SignatureAlgorithm.HS512, settings.getTokenSigningKey())
                 .compact();
 
