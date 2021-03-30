@@ -78,6 +78,7 @@ export class AuthService {
   }
 
   private static isTokenValid(prefix) {
+    return AuthService._storeGet(prefix);
     const clientExpiration = AuthService._storeGet(prefix + '_expiration');
     return clientExpiration && Number(clientExpiration) > (new Date().valueOf() + 2000);
   }
@@ -87,10 +88,10 @@ export class AuthService {
   }
 
   private static clearTokenData() {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('jwt_token_expiration');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('refresh_token_expiration');
+    // localStorage.removeItem('jwt_token');
+    // localStorage.removeItem('jwt_token_expiration');
+    // localStorage.removeItem('refresh_token');
+    // localStorage.removeItem('refresh_token_expiration');
   }
 
   public static getJwtToken() {
@@ -300,8 +301,8 @@ export class AuthService {
           if (refreshToken) {
             this.updateAndValidateToken(refreshToken, 'refresh_token', false);
           } else {
-            localStorage.removeItem('refresh_token');
-            localStorage.removeItem('refresh_token_expiration');
+            // localStorage.removeItem('refresh_token');
+            // localStorage.removeItem('refresh_token_expiration');
           }
         } catch (e) {
           return throwError(e);
@@ -563,15 +564,15 @@ export class AuthService {
     const tokenData = this.jwtHelper.decodeToken(token);
     const issuedAt = tokenData.iat;
     const expTime = tokenData.exp;
-    if (issuedAt && expTime) {
-      const ttl = expTime - issuedAt;
-      if (ttl > 0) {
-        const clientExpiration = new Date().valueOf() + ttl * 1000;
+    // if (issuedAt && expTime) {
+    //   const ttl = expTime - issuedAt;
+    //   if (ttl > 0) {
+    //     const clientExpiration = new Date().valueOf() + ttl * 1000;
         localStorage.setItem(prefix, token);
-        localStorage.setItem(prefix + '_expiration', '' + clientExpiration);
+        // localStorage.setItem(prefix + '_expiration', '' + clientExpiration);
         valid = true;
-      }
-    }
+    //   }
+    // }
     if (!valid && notify) {
       this.notifyUnauthenticated();
     }
